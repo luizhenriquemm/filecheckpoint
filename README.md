@@ -4,8 +4,19 @@ This class can control which files in an S3 directory have been processed and wh
 
 You'll need to set a configuration path for the script save it's checkpoint database, after that, the class object is ready for use. The list of files that aren't processed can be get by calling the method GetFiles, passing only the path of the data. Once your process is done, the last thing to do is call the FinishFiles method and all the file names returned previously will be stored in the configuration path as done, and in the next batch, these files will be ignored, as they are already processed.
 
-Example
+Example:
 
-´´´
-asd
-´´´python
+```python
+from FileCheckpoint import FileCheckpoint
+
+fc = FileCheckpoint(
+  configPath = "s3://my-config-bucket/filecheckpoingconfig/"
+)
+
+files = fc.GetFiles("s3://my-data-bucket/landing/table_name/")
+
+df = spark.read.json(files)
+df.write.mode("append").insertInto("my_database.my_loved_table")
+
+fc.FinishFiles()
+```
