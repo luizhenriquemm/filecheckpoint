@@ -1,18 +1,13 @@
-import boto3, datetime
+import datetime
 import builtins as b
 import pyspark.sql.types as T
 import pyspark.sql.functions as F
 
 class FileCheckpoint:
   configPath = None
-  resource = None
   filesInProcess = None
   pathInProcess = None
   def __init__(self, **kwargs):
-    if "resource" in kwargs:
-      self.resource = kwargs["resource"]
-    else:
-      self.resource = boto3.resource("s3")
     if "configPath" not in kwargs:
       raise Exception("Missing configPath for saving and loading metadata")
     self.configPath = str(kwargs["configPath"])
